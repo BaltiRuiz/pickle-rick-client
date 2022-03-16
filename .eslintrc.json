@@ -1,0 +1,16 @@
+{
+    "parser": "@babel/eslint-parser",
+    "parserOptions": {
+        "babelOptions": {
+            "presets": ["@babel/preset-react"]
+        },
+        "requireConfigFile": false,
+        "sourceType": "module"
+    },
+    "extends": [
+        "react-app",
+        "react-app/jest",
+        "plugin:react-hooks/recommended"
+    ],
+    "rules": {}
+}
