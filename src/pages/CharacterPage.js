@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+import { APIState } from "../enums/api.enums";
 import { CharacterGender, CharacterStatus } from "../enums/character.enums";
 import { reqFindCharacters, reqGetAllCharacters, reqMarkOrRemoveCharacterAsFavourite } from "../store/character/store.character.thunk.actions";
 
@@ -33,7 +34,7 @@ function CharacterBox(props) {
                     </p>
                     <p>{`${characterData.status} - ${characterData.species} - ${characterData.gender}`}</p>
                     <p>{`Origin: ${characterData.origin.name}`}</p>
-                    <p>{`Appears in ${characterData.episode.length} episodes`}</p>
+                    <p>{`Appears in ${characterData.episode.length} episode(s)`}</p>
                     <p>{`Last known location: ${characterData.location.name}`}</p>
                 </div>
             </div>
@@ -68,11 +69,15 @@ function CharacterFinder() {
     const [type, setType] = useState("");
     const [gender, setGender] = useState("");
 
+    const applicationState = useSelector(state => state.application);
+
     const dispatch = useDispatch();
 
     const handleButtonClick = () => {
         dispatch(reqFindCharacters(ids, name, status, species, type, gender));
     }
+
+    const inputDisabled = applicationState.apiState === APIState.Fetching;
 
     return (
         <div>
@@ -81,6 +86,7 @@ function CharacterFinder() {
                 <input
                     type="text"
                     id="character-ids"
+                    disabled={inputDisabled}
                     onChange={(e) => setIDs(e.currentTarget.value)}
                 />
             </div>
@@ -89,6 +95,7 @@ function CharacterFinder() {
                 <input
                     type="text"
                     id="character-name"
+                    disabled={inputDisabled}
                     onChange={(e) => setName(e.currentTarget.value)}
                 />
             </div>
@@ -97,6 +104,7 @@ function CharacterFinder() {
                 <select
                     id="character-status"
                     value={status}
+                    disabled={inputDisabled}
                     onChange={(e) => setStatus(e.currentTarget.value)}
                 >
                     <option key="character-status-0" value="">Do not search</option>
@@ -110,6 +118,7 @@ function CharacterFinder() {
                 <input
                     type="text"
                     id="character-species"
+                    disabled={inputDisabled}
                     onChange={(e) => setSpecies(e.currentTarget.value)}
                 />
             </div>
@@ -118,6 +127,7 @@ function CharacterFinder() {
                 <input
                     type="text"
                     id="character-type"
+                    disabled={inputDisabled}
                     onChange={(e) => setType(e.currentTarget.value)}
                 />
             </div>
@@ -126,6 +136,7 @@ function CharacterFinder() {
                 <select
                     id="character-gender"
                     value={gender}
+                    disabled={inputDisabled}
                     onChange={(e) => setGender(e.currentTarget.value)}
                 >
                     <option key="character-gender-0" value="">Do not search</option>
@@ -137,6 +148,7 @@ function CharacterFinder() {
             <div>
                 <button
                     type="button"
+                    disabled={inputDisabled}
                     onClick={handleButtonClick}
                 >
                     Find Characters

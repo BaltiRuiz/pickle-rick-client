@@ -1,4 +1,5 @@
 export const storeEnums = {
+    SetAPIState: "API_SET_STATE",
     SetUserName: "USER_SET_NAME",
     SetUserError: "USER_SET_ERROR",
     SetCharactersData: "CHARACTERS_SET_DATA",

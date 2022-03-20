@@ -14,6 +14,7 @@ import { LoginPage } from "./pages/LoginPage";
 import { RegisterUserPage } from "./pages/RegisterUserPage";
 import { LogoutPage } from "./pages/LogoutPage";
 
+import { APIState } from "./enums/api.enums";
 import { StorageEnums } from "./enums/storage.enums";
 
 import { initAxiosConfiguration } from "./config/axios.config";
@@ -21,6 +22,7 @@ import { initAxiosConfiguration } from "./config/axios.config";
 function PrivateRoute(props) {
     const userToken = localStorage.getItem(StorageEnums.UserToken);
 
+    const applicationState = useSelector(state => state.application);
     const userState = useSelector(state => state.user);
 
     const dispatch = useDispatch();
@@ -31,6 +33,9 @@ function PrivateRoute(props) {
         }
     }, [userToken, dispatch]);
 
+    const linkPointerEvents = applicationState.apiState === APIState.Fetching ? "none" : "auto";
+    const applicationOpacity = applicationState.apiState === APIState.Fetching ? 0.5 : 1;
+
     if (userState.name) {
         return (
             <div>
@@ -40,20 +45,22 @@ function PrivateRoute(props) {
                 <div>
                     <ul>
                         <li>
-                            <Link to="/character">Characters</Link>
+                            <Link to="/character" style={{ pointerEvents: linkPointerEvents }}>Characters</Link>
                         </li>
                         <li>
-                            <Link to="/location">Locations</Link>
+                            <Link to="/location" style={{ pointerEvents: linkPointerEvents }}>Locations</Link>
                         </li>
                         <li>
-                            <Link to="/episode">Episodes</Link>
+                            <Link to="/episode" style={{ pointerEvents: linkPointerEvents }}>Episodes</Link>
                         </li>
                         <li>
-                            <Link to="/logout">Logout</Link>
+                            <Link to="/logout" style={{ pointerEvents: linkPointerEvents }}>Logout</Link>
                         </li>
                     </ul>
                     <hr/>
-                    {props.children}
+                    <div style={{ opacity: applicationOpacity }}>
+                        {props.children}
+                    </div>
                 </div>
             </div>
         );

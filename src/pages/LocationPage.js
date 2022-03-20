@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+import { APIState } from "../enums/api.enums";
+
 import { reqFindLocations, reqGetAllLocations } from "../store/location/store.location.thunk.actions";
 
 function LocationBox(props) {
@@ -10,7 +12,7 @@ function LocationBox(props) {
         <div>
             <p>{`${locationData.id}: ${locationData.name}`}</p>
             <p>{`${locationData.type} - ${locationData.dimension}`}</p>
-            <p>{`It has ${locationData.residents.length} residents`}</p>
+            <p>{`It has ${locationData.residents.length} resident(s)`}</p>
         </div>
     );
 }
@@ -40,11 +42,15 @@ function LocationFinder() {
     const [type, setType] = useState("");
     const [dimension, setDimension] = useState("");
 
+    const applicationState = useSelector(state => state.application);
+
     const dispatch = useDispatch();
 
     const handleButtonClick = () => {
         dispatch(reqFindLocations(ids, name, type, dimension));
     }
+
+    const inputDisabled = applicationState.apiState === APIState.Fetching;
 
     return (
         <div>
@@ -53,6 +59,7 @@ function LocationFinder() {
                 <input
                     type="text"
                     id="location-ids"
+                    disabled={inputDisabled}
                     onChange={(e) => setIDs(e.currentTarget.value)}
                 />
             </div>
@@ -61,6 +68,7 @@ function LocationFinder() {
                 <input
                     type="text"
                     id="location-name"
+                    disabled={inputDisabled}
                     onChange={(e) => setName(e.currentTarget.value)}
                 />
             </div>
@@ -69,6 +77,7 @@ function LocationFinder() {
                 <input
                     type="text"
                     id="location-type"
+                    disabled={inputDisabled}
                     onChange={(e) => setType(e.currentTarget.value)}
                 />
             </div>
@@ -77,12 +86,14 @@ function LocationFinder() {
                 <input
                     type="text"
                     id="location-dimension"
+                    disabled={inputDisabled}
                     onChange={(e) => setDimension(e.currentTarget.value)}
                 />
             </div>
             <div>
                 <button
                     type="button"
+                    disabled={inputDisabled}
                     onClick={handleButtonClick}
                 >
                     Find Locations

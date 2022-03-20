@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+import { APIState } from "../enums/api.enums";
+
 import { reqFindEpisodes, reqGetAllEpisodes } from "../store/episode/store.episode.thunk.actions";
 
 function EpisodeBox(props) {
@@ -10,7 +12,7 @@ function EpisodeBox(props) {
         <div>
             <p>{`${episodeData.id}: ${episodeData.name} | ${episodeData.episode}`}</p>
             <p>{`Released on ${episodeData.air_date}`}</p>
-            <p>{`Features ${episodeData.characters.length} characters`}</p>
+            <p>{`Features ${episodeData.characters.length} character(s)`}</p>
         </div>
     )
 }
@@ -39,11 +41,15 @@ function EpisodeFinder() {
     const [name, setName] = useState("");
     const [code, setCode] = useState("");
 
+    const applicationState = useSelector(state => state.application);
+
     const dispatch = useDispatch();
 
     const handleButtonClick = () => {
         dispatch(reqFindEpisodes(ids, name, code));
     }
+
+    const inputDisabled = applicationState.apiState === APIState.Fetching;
 
     return (
         <div>
@@ -52,6 +58,7 @@ function EpisodeFinder() {
                 <input
                     type="text"
                     id="episode-ids"
+                    disabled={inputDisabled}
                     onChange={(e) => setIDs(e.currentTarget.value)}
                 />
             </div>
@@ -60,6 +67,7 @@ function EpisodeFinder() {
                 <input
                     type="text"
                     id="episode-name"
+                    disabled={inputDisabled}
                     onChange={(e) => setName(e.currentTarget.value)}
                 />
             </div>
@@ -68,12 +76,14 @@ function EpisodeFinder() {
                 <input
                     type="text"
                     id="episode-code"
+                    disabled={inputDisabled}
                     onChange={(e) => setCode(e.currentTarget.value)}
                 />
             </div>
             <div>
                 <button
                     type="button"
+                    disabled={inputDisabled}
                     onClick={handleButtonClick}
                 >
                     Find Episodes
