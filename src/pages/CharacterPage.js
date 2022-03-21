@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { APIState } from "../enums/api.enums";
+import { useAPIStateFetching } from "../App";
+
 import { CharacterGender, CharacterStatus } from "../enums/character.enums";
 import { reqFindCharacters, reqGetAllCharacters, reqMarkOrRemoveCharacterAsFavourite } from "../store/character/store.character.thunk.actions";
 
@@ -9,6 +10,8 @@ function CharacterBox(props) {
     const { characterData } = props;
 
     const dispatch = useDispatch();
+
+    const isAPIFetching = useAPIStateFetching();
 
     const handleFavouriteClick = () => {
         dispatch(reqMarkOrRemoveCharacterAsFavourite(characterData.id, characterData.favourite));
@@ -28,6 +31,7 @@ function CharacterBox(props) {
                                 type="image"
                                 src={characterData.favourite ? "favourite.png" : "notfavourite.png"}
                                 alt="favourite-icon"
+                                disabled={isAPIFetching}
                                 onClick={handleFavouriteClick}
                             />
                         </span>
@@ -69,15 +73,13 @@ function CharacterFinder() {
     const [type, setType] = useState("");
     const [gender, setGender] = useState("");
 
-    const applicationState = useSelector(state => state.application);
-
     const dispatch = useDispatch();
 
     const handleButtonClick = () => {
         dispatch(reqFindCharacters(ids, name, status, species, type, gender));
     }
 
-    const inputDisabled = applicationState.apiState === APIState.Fetching;
+    const isAPIFetching = useAPIStateFetching();
 
     return (
         <div>
@@ -86,7 +88,7 @@ function CharacterFinder() {
                 <input
                     type="text"
                     id="character-ids"
-                    disabled={inputDisabled}
+                    disabled={isAPIFetching}
                     onChange={(e) => setIDs(e.currentTarget.value)}
                 />
             </div>
@@ -95,7 +97,7 @@ function CharacterFinder() {
                 <input
                     type="text"
                     id="character-name"
-                    disabled={inputDisabled}
+                    disabled={isAPIFetching}
                     onChange={(e) => setName(e.currentTarget.value)}
                 />
             </div>
@@ -104,7 +106,7 @@ function CharacterFinder() {
                 <select
                     id="character-status"
                     value={status}
-                    disabled={inputDisabled}
+                    disabled={isAPIFetching}
                     onChange={(e) => setStatus(e.currentTarget.value)}
                 >
                     <option key="character-status-0" value="">Do not search</option>
@@ -118,7 +120,7 @@ function CharacterFinder() {
                 <input
                     type="text"
                     id="character-species"
-                    disabled={inputDisabled}
+                    disabled={isAPIFetching}
                     onChange={(e) => setSpecies(e.currentTarget.value)}
                 />
             </div>
@@ -127,7 +129,7 @@ function CharacterFinder() {
                 <input
                     type="text"
                     id="character-type"
-                    disabled={inputDisabled}
+                    disabled={isAPIFetching}
                     onChange={(e) => setType(e.currentTarget.value)}
                 />
             </div>
@@ -136,7 +138,7 @@ function CharacterFinder() {
                 <select
                     id="character-gender"
                     value={gender}
-                    disabled={inputDisabled}
+                    disabled={isAPIFetching}
                     onChange={(e) => setGender(e.currentTarget.value)}
                 >
                     <option key="character-gender-0" value="">Do not search</option>
@@ -148,7 +150,7 @@ function CharacterFinder() {
             <div>
                 <button
                     type="button"
-                    disabled={inputDisabled}
+                    disabled={isAPIFetching}
                     onClick={handleButtonClick}
                 >
                     Find Characters

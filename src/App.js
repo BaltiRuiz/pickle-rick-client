@@ -19,13 +19,20 @@ import { StorageEnums } from "./enums/storage.enums";
 
 import { initAxiosConfiguration } from "./config/axios.config";
 
+export function useAPIStateFetching() {
+    const applicationState = useSelector(state => state.application);
+
+    return applicationState.apiState === APIState.Fetching;
+}
+
 function PrivateRoute(props) {
     const userToken = localStorage.getItem(StorageEnums.UserToken);
 
-    const applicationState = useSelector(state => state.application);
     const userState = useSelector(state => state.user);
 
     const dispatch = useDispatch();
+
+    const isAPIFetching = useAPIStateFetching();
 
     useEffect(() => {
         if (userToken) {
@@ -33,8 +40,8 @@ function PrivateRoute(props) {
         }
     }, [userToken, dispatch]);
 
-    const linkPointerEvents = applicationState.apiState === APIState.Fetching ? "none" : "auto";
-    const applicationOpacity = applicationState.apiState === APIState.Fetching ? 0.5 : 1;
+    const linkPointerEvents = isAPIFetching ? "none" : "auto";
+    const applicationOpacity = isAPIFetching ? 0.5 : 1;
 
     if (userState.name) {
         return (
@@ -43,18 +50,18 @@ function PrivateRoute(props) {
                     {`Welcome, ${userState.name} from dimension C-137`}
                 </div>
                 <div>
-                    <ul>
+                    <ul style={{ pointerEvents: linkPointerEvents }}>
                         <li>
-                            <Link to="/character" style={{ pointerEvents: linkPointerEvents }}>Characters</Link>
+                            <Link to="/character">Characters</Link>
                         </li>
                         <li>
-                            <Link to="/location" style={{ pointerEvents: linkPointerEvents }}>Locations</Link>
+                            <Link to="/location">Locations</Link>
                         </li>
                         <li>
-                            <Link to="/episode" style={{ pointerEvents: linkPointerEvents }}>Episodes</Link>
+                            <Link to="/episode">Episodes</Link>
                         </li>
                         <li>
-                            <Link to="/logout" style={{ pointerEvents: linkPointerEvents }}>Logout</Link>
+                            <Link to="/logout">Logout</Link>
                         </li>
                     </ul>
                     <hr/>

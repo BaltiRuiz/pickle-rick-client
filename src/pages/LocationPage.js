@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { APIState } from "../enums/api.enums";
+import { useAPIStateFetching } from "../App";
 
 import { reqFindLocations, reqGetAllLocations } from "../store/location/store.location.thunk.actions";
 
@@ -42,15 +42,13 @@ function LocationFinder() {
     const [type, setType] = useState("");
     const [dimension, setDimension] = useState("");
 
-    const applicationState = useSelector(state => state.application);
-
     const dispatch = useDispatch();
 
     const handleButtonClick = () => {
         dispatch(reqFindLocations(ids, name, type, dimension));
     }
 
-    const inputDisabled = applicationState.apiState === APIState.Fetching;
+    const isAPIFetching = useAPIStateFetching();
 
     return (
         <div>
@@ -59,7 +57,7 @@ function LocationFinder() {
                 <input
                     type="text"
                     id="location-ids"
-                    disabled={inputDisabled}
+                    disabled={isAPIFetching}
                     onChange={(e) => setIDs(e.currentTarget.value)}
                 />
             </div>
@@ -68,7 +66,7 @@ function LocationFinder() {
                 <input
                     type="text"
                     id="location-name"
-                    disabled={inputDisabled}
+                    disabled={isAPIFetching}
                     onChange={(e) => setName(e.currentTarget.value)}
                 />
             </div>
@@ -77,7 +75,7 @@ function LocationFinder() {
                 <input
                     type="text"
                     id="location-type"
-                    disabled={inputDisabled}
+                    disabled={isAPIFetching}
                     onChange={(e) => setType(e.currentTarget.value)}
                 />
             </div>
@@ -86,14 +84,14 @@ function LocationFinder() {
                 <input
                     type="text"
                     id="location-dimension"
-                    disabled={inputDisabled}
+                    disabled={isAPIFetching}
                     onChange={(e) => setDimension(e.currentTarget.value)}
                 />
             </div>
             <div>
                 <button
                     type="button"
-                    disabled={inputDisabled}
+                    disabled={isAPIFetching}
                     onClick={handleButtonClick}
                 >
                     Find Locations

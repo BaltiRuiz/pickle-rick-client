@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { APIState } from "../enums/api.enums";
+import { useAPIStateFetching } from "../App";
 
 import { reqFindEpisodes, reqGetAllEpisodes } from "../store/episode/store.episode.thunk.actions";
 
@@ -41,15 +41,13 @@ function EpisodeFinder() {
     const [name, setName] = useState("");
     const [code, setCode] = useState("");
 
-    const applicationState = useSelector(state => state.application);
-
     const dispatch = useDispatch();
 
     const handleButtonClick = () => {
         dispatch(reqFindEpisodes(ids, name, code));
     }
 
-    const inputDisabled = applicationState.apiState === APIState.Fetching;
+    const isAPIFetching = useAPIStateFetching();
 
     return (
         <div>
@@ -58,7 +56,7 @@ function EpisodeFinder() {
                 <input
                     type="text"
                     id="episode-ids"
-                    disabled={inputDisabled}
+                    disabled={isAPIFetching}
                     onChange={(e) => setIDs(e.currentTarget.value)}
                 />
             </div>
@@ -67,7 +65,7 @@ function EpisodeFinder() {
                 <input
                     type="text"
                     id="episode-name"
-                    disabled={inputDisabled}
+                    disabled={isAPIFetching}
                     onChange={(e) => setName(e.currentTarget.value)}
                 />
             </div>
@@ -76,14 +74,14 @@ function EpisodeFinder() {
                 <input
                     type="text"
                     id="episode-code"
-                    disabled={inputDisabled}
+                    disabled={isAPIFetching}
                     onChange={(e) => setCode(e.currentTarget.value)}
                 />
             </div>
             <div>
                 <button
                     type="button"
-                    disabled={inputDisabled}
+                    disabled={isAPIFetching}
                     onClick={handleButtonClick}
                 >
                     Find Episodes
