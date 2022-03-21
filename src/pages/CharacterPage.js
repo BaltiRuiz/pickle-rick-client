@@ -164,10 +164,8 @@ export function CharacterPage() {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (!characterData) {
-            dispatch(reqGetAllCharacters());
-        }
-    }, [characterData, dispatch]);
+        dispatch(reqGetAllCharacters());
+    }, [dispatch]);
 
     return (
         <div className="centered-block">

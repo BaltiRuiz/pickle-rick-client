@@ -20,8 +20,10 @@ export function LogoutPage() {
     });
 
     return (
-        <div className="screen-centered-block">
-            {userState.error ? userState.error : "Redirecting to login page..."}
+        <div className="screen-centered-block-outer">
+            <div className="screen-centered-block-inner">
+                {userState.error ? userState.error : "Redirecting to login page..."}
+            </div>
         </div>
     );
 }

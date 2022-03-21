@@ -2,13 +2,19 @@
     text-align: center;
 }
 
-.screen-centered-block {
+.screen-centered-block-outer {
+    display: table;
     position: absolute;
-    top: 45%;
-    left: 50%;
-    margin-top: -50px;
-    margin-left: -100px;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
     text-align: center;
+}
+
+.screen-centered-block-inner {
+    display: table-cell;
+    vertical-align: middle;
 }
 
 .row-block {
